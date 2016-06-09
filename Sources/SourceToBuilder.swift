@@ -34,15 +34,27 @@ extension ModelBuilder {
                 completion(builder: nil)
             }
         #elseif os(Linux)
-            guard let host = url.host, path = url.path else {
+            guard let host = url.host else {
                 completion(builder:nil)
                 return
+            }
+
+            var urlAppendage : String = ""
+
+            if let path = url.path {
+              urlAppendage += "/"
+              urlAppendage += path
+            }
+
+            if let query = url.query {
+              urlAppendage += "?"
+              urlAppendage += query
             }
 
             let httpResource = HttpResource(schema: "http", host: host, port: "80")
             let data = NSData()
 
-            let resource = httpResource.resourceByAddingPathComponent(pathComponent: path)
+            let resource = httpResource.resourceByAddingPathComponent(pathComponent: urlAppendage)
             HttpClient.post(resource: resource, data: data) { (error, status, headers, data) in
                 if error != nil {
                     print("Failure")
