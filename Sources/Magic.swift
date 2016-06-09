@@ -57,7 +57,7 @@ extension NSNumber {
 
      - returns: true if the object is a Bool
      */
-    func isBool() -> Bool {
+    public func isBool() -> Bool {
         #if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
             let boolID = CFBooleanGetTypeID() // the type ID of CFBoolean
             let numID = CFGetTypeID(self) // the type ID of num
@@ -76,7 +76,7 @@ extension NSURL {
 
      - returns: the url without it's last component
      */
-    func removeLast() -> NSURL? {
+    public func removeLast() -> NSURL? {
         var arrayOfComponents = self.absoluteString.split("/")
         arrayOfComponents.removeLast()
         let url = arrayOfComponents.reduce("", combine: { $0 + "/" + $1 })
@@ -86,7 +86,7 @@ extension NSURL {
 
 
 extension String {
-    func split(_ on: Character) -> [String] {
+    public func split(_ on: Character) -> [String] {
 
         var segments = [String]()
         var current = ""
