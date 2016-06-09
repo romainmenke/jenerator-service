@@ -56,7 +56,7 @@ extension ModelBuilder {
             let data = NSData()
 
             let resource = httpResource.resourceByAddingPathComponent(pathComponent: urlAppendage)
-            HttpClient.post(resource: resource, data: data) { (error, status, headers, data) in
+            HttpClient.get(resource: resource, data: data) { (error, status, headers, data) in
                 if error != nil {
                     print("Failure")
                     completion(builder: nil)
