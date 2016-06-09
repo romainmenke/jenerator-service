@@ -124,7 +124,7 @@ extension String {
 
     public func replace(each seperator:String, with joiner:String) -> String {
 
-        let splitString = self.components(separatedBy: NSCharacterSet.newlines())
+        let splitString = self.components(separatedBy: seperator)
         let joinedString = splitString.reduce("", combine: { $0 + joiner + $1 })
         return joinedString
 
