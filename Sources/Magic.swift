@@ -12,7 +12,7 @@ import Foundation
 extension Array where Element : Equatable {
     /**
      Append a new elment to an array if the array doesn't yet contain it
-     
+
      - parameter element: a new element
      */
     mutating func appendUnique(_ element:Element) {
@@ -35,25 +35,25 @@ extension String {
     }
     /// Make the first character uppercase
     var uppercaseFirst: String {
-        
+
         #if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
-            
+
             return first.uppercaseString + String(characters.dropFirst())
-            
+
         #elseif os(Linux)
-            
+
             return first.uppercased() + String(characters.dropFirst())
-            
+
         #endif
-        
+
     }
 }
 
 extension NSNumber {
-    
+
     /**
      Determine if an NSNumber is derived from a Bool or a Number
-     
+
      - returns: true if the object is a Bool
      */
     func isBool() -> Bool {
@@ -65,14 +65,14 @@ extension NSNumber {
             return false
         #endif
     }
-    
+
 }
 
 
 extension NSURL {
     /**
      Drop the last component from an NSURL
-     
+
      - returns: the url without it's last component
      */
     func removeLast() -> NSURL? {
@@ -86,10 +86,10 @@ extension NSURL {
 
 extension String {
     func split(_ on: Character) -> [String] {
-        
+
         var segments = [String]()
         var current = ""
-        
+
         for char in self.characters {
             if (char == on) {
                 segments.append(current)
@@ -98,11 +98,50 @@ extension String {
                 current.append(char)
             }
         }
-        
+
         if current.characters.count > 0 {
             segments.append(current)
         }
-        
+
         return segments
     }
+}
+
+extension String {
+  public var stringByAddingPercentEncodingForRFC3986 : String {
+    get {
+      let unreserved = "-._~/?"
+      let allowed = NSMutableCharacterSet.alphanumerics()
+      allowed.addCharacters(in: unreserved)
+      return stringByAddingPercentEncodingWithAllowedCharacters(allowed) ?? ""
+    }
+  }
+}
+
+
+extension String {
+
+    public func replace(each seperator:String, with joiner:String) -> String {
+
+        let splitString = self.components(separatedBy: NSCharacterSet.newlines())
+        let joinedString = splitString.reduce("", combine: { $0 + joiner + $1 })
+        return joinedString
+
+    }
+}
+
+extension String {
+
+  public func extractPostRequestData() -> [String:String] {
+
+    var data : [String:String] = [:]
+
+    for pair in self.components(separatedBy: "&") {
+      let components = pair.components(separatedBy: "=")
+      if let key = components.first?.stringByRemovingPercentEncoding, value = components.last?.stringByRemovingPercentEncoding where components.count == 2 {
+        data[key] = value
+      }
+    }
+    return data
+  }
 }

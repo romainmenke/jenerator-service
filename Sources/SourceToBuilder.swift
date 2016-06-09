@@ -51,7 +51,9 @@ extension ModelBuilder {
               urlAppendage += query
             }
 
-            let httpResource = HttpResource(schema: "http", host: host, port: "80")
+            let scheme = url.absoluteString.components(separatedBy: ":").first ?? "https"
+
+            let httpResource = HttpResource(schema: scheme, host: host, port: "80")
             let data = NSData()
 
             let resource = httpResource.resourceByAddingPathComponent(pathComponent: urlAppendage)
