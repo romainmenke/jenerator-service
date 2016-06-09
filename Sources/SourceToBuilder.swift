@@ -34,36 +34,14 @@ extension ModelBuilder {
                 completion(builder: nil)
             }
         #elseif os(Linux)
-            guard let host = url.host else {
-                completion(builder:nil)
-                return
+
+          NSData.contentsOfURL(urlString:url.absoluteString) { data in
+            if let data = data, json = JSONCoder.decode(data) {
+              completion(builder: ModelBuilder(rootName: "Container", classPrefix: classPrefix, source: url.absoluteString).buildModel(json))
+            } else {
+              completion(builder: nil)
             }
-
-            var urlAppendage : String = ""
-
-            if let path = url.path {
-              urlAppendage += path
-            }
-
-            if let query = url.query {
-              urlAppendage += "?"
-              urlAppendage += query
-            }
-
-            let scheme = url.absoluteString.components(separatedBy: ":").first ?? "https"
-
-            let httpResource = HttpResource(schema: scheme, host: host, port: "80")
-            let data = NSData()
-
-            let resource = httpResource.resourceByAddingPathComponent(pathComponent: urlAppendage)
-            HttpClient.get(resource: resource, data: data) { (error, status, headers, data) in
-                if error != nil {
-                    print("Failure")
-                    completion(builder: nil)
-                } else if let data = data, json = JSONCoder.decode(data) {
-                    completion(builder: ModelBuilder(rootName: "Container", classPrefix: classPrefix, source: url.absoluteString).buildModel(json))
-                }
-            }
+          }
         #endif
     }
 

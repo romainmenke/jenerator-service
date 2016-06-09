@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KituraNet
 
 
 extension Array where Element : Equatable {
@@ -143,5 +144,51 @@ extension String {
       }
     }
     return data
+  }
+}
+
+
+
+
+extension NSData {
+
+  public static func contentsOfURL(urlString url:String, completionHandler:((data:NSData?) -> Void)) {
+
+    func handleResponse(response: ClientResponse?, completionHandler: (status:Int?, headers: [String:String]?, data:NSData?) -> Void) {
+      if let response = response {
+
+        // Handle headers
+        var headers:[String:String] = [:]
+
+        var iterator = response.headers.makeIterator()
+
+        while let header = iterator.next(){
+          headers.updateValue(header.value[0], forKey: header.key)
+        }
+
+        // Handle response body
+        let responseData = NSMutableData()
+        do {
+          try response.readAllData(into: responseData)
+          return completionHandler(status: response.status, headers: headers, data: responseData)
+        } catch {
+          return completionHandler(status: response.status, headers: headers, data: nil)
+        }
+
+      } else {
+        completionHandler(status: nil, headers: nil, data: nil)
+      }
+    }
+
+    let request = HTTP.request(url) { (response) in
+      handleResponse(response: response) { (status, headers, data) in
+        if let data = data {
+            completionHandler(data:data)
+        } else {
+          completionHandler(data:nil)
+        }
+      }
+    }
+    request.end()
   }
 }
