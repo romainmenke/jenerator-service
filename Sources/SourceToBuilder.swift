@@ -42,7 +42,6 @@ extension ModelBuilder {
             var urlAppendage : String = ""
 
             if let path = url.path {
-              urlAppendage += "/"
               urlAppendage += path
             }
 
