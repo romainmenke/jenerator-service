@@ -32,7 +32,7 @@ extension ModelBuilder {
             }
         #elseif os(Linux)
 
-          NSData.contentsOfURL(urlString:url.absoluteString) { data in
+          NSData.contents(ofUrl:url.absoluteString) { data in
             if let data = data, json = JSONCoder.decode(data) {
               completion(builder: ModelBuilder(rootName: "Container", classPrefix: classPrefix, source: url.absoluteString).buildModel(json))
             } else {
