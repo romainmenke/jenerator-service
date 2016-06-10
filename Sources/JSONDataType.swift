@@ -74,7 +74,7 @@ indirect enum JSONDataType : Equatable, CustomStringConvertible {
             return JSONDataType.JSONArray(type: .JSONNull)
         }
 
-        switch some {
+        switch value {
         case is Int :
             return JSONDataType.JSONInt
         case is Bool :
