@@ -75,6 +75,8 @@ indirect enum JSONDataType : Equatable, CustomStringConvertible {
         }
 
         switch value {
+        case is UInt :
+            return JSONDataType.JSONInt
         case is Int :
             return JSONDataType.JSONInt
         case is Bool :

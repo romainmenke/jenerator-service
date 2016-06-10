@@ -8,9 +8,6 @@
 
 import Foundation
 
-#if os(Linux)
-    import SimpleHttpClient
-#endif
 
 extension ModelBuilder {
 
@@ -44,33 +41,6 @@ extension ModelBuilder {
           }
         #endif
     }
-
-
-    // public static func fromSource(url:NSURL, classPrefix:String) -> ModelBuilder? {
-    //     #if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
-    //         guard let data = NSData(contentsOfURL: url) else {
-    //             return nil
-    //         }
-    //
-    //         if let json = JSONCoder.decode(data) {
-    //             return ModelBuilder(rootName: "Container", classPrefix: classPrefix, source: url.absoluteString).buildModel(json)
-    //         }
-    //         return nil
-    //     #elseif os(Linux)
-    //         let httpResource = HttpResource(schema: "", host: url.absoluteString, port: "80")
-    //         let data = NSData()
-    //
-    //         let resource = httpResource.resourceByAddingPathComponent(pathComponent: "")
-    //         HttpClient.post(resource: resource, data: data) { (error, status, headers, data) in
-    //             if error != nil {
-    //                 print("Failure")
-    //                 return nil
-    //             } else if let data = data {
-    //                 return ModelBuilder(rootName: "Container", classPrefix: classPrefix, source: url.absoluteString).buildModel(data)
-    //             }
-    //         }
-    //     #endif
-    // }
 
     /**
      Constructer for a local JSON source
